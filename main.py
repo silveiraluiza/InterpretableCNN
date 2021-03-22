@@ -38,7 +38,7 @@ if __name__ == '__main__':
     parser.add_argument('-pretrained', type=str, default="")
     parser.add_argument('--dataset', type=str, default='CUB', metavar='N',
                         help='name of dataset: SmallNORB or MNIST or NORB or CIFAR10')
-    parser.add_argument('-gpu', type=int, default=1, help="which gpu to use")
+    parser.add_argument('-gpu', type=int, default=0, help="which gpu to use")
     parser.add_argument('--loss', type=str, default='margin_loss', metavar='N',
                         help='loss to use: cross_entropy_loss, margin_loss, spread_loss')
     parser.add_argument('--routing', type=str, default='angle_routing', metavar='N',
@@ -63,6 +63,8 @@ if __name__ == '__main__':
     args.num_classes = setting['num_classes']
     args.env_name = '{}'.format(args.dataset)
 
+    print(setting['root'])
+    
     train_dataset = getattr(datasets, args.dataset)(root=setting['root'],
                                                     download=True,
                                                     train=True,
@@ -82,7 +84,8 @@ if __name__ == '__main__':
                                               batch_size=args.batch_size,
                                               num_workers=args.num_workers,
                                               shuffle=True)
-    use_cuda = torch.cuda.is_available()
+    use_cuda = False #torch.cuda.is_available()
+    torch.device('cpu')
     model = Model(args)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)

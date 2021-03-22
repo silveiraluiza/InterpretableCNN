@@ -35,14 +35,14 @@ class Model(nn.Module):
                         out = tau * torch.clamp(1 - beta * norm / self.out_size, min=-1)
                         templates[k, i, j] = float(out)
 
-        self.templates_f = Variable(templates, requires_grad=False).cuda(args.gpu)
+        self.templates_f = Variable(templates, requires_grad=False) #.cuda(args.gpu)
         neg_template = -tau * torch.ones(1, self.out_size, self.out_size)
         templates = torch.cat([templates, neg_template], 0)
-        self.templates_b = Variable(templates, requires_grad=False).cuda(args.gpu)
+        self.templates_b = Variable(templates, requires_grad=False) #.cuda(args.gpu)
 
         p_T = [alpha / n_square for _ in range(n_square)]
         p_T.append(1 - alpha)
-        self.p_T = Variable(torch.FloatTensor(p_T), requires_grad=False).cuda(args.gpu)
+        self.p_T = Variable(torch.FloatTensor(p_T), requires_grad=False) #.cuda(args.gpu)
 
     def get_masked_output(self, x):
         # choose template that maximize activation and return x_masked
